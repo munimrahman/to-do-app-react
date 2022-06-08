@@ -19,9 +19,25 @@ class Todos extends React.Component {
                 isSelect: false,
             },
             {
-                id: 'kksdfh',
+                id: 'kks54dfh',
                 time: new Date(),
-                text: 'Main Title 2',
+                text: 'Salman Emon',
+                description: 'aldkjf saedrf ikrf',
+                isComplete: false,
+                isSelect: false,
+            },
+            {
+                id: 'kksdjhgbkjfh',
+                time: new Date(),
+                text: 'Azad Hossain',
+                description: 'aldkjf saedrf ikrf',
+                isComplete: false,
+                isSelect: false,
+            },
+            {
+                id: '41saa',
+                time: new Date(),
+                text: 'Munim Rahman',
                 description: 'aldkjf saedrf ikrf',
                 isComplete: false,
                 isSelect: false,
@@ -29,7 +45,8 @@ class Todos extends React.Component {
         ],
         isOpenToDoForm: false,
         searchTerm: '',
-        view: 'list'
+        view: 'list',
+        filter: 'all'
     }
     toggleSelect = toDoId => {
         const todos = [...this.state.todos]
@@ -64,17 +81,43 @@ class Todos extends React.Component {
         this.setState({ todos })
         this.toggleForm()
     }
-    handleFilter = () => { }
+    handleFilter = filter => {
+        this.setState({ filter })
+    }
+    performFilter = todos => {
+        const { filter } = this.state;
+        if (filter === 'completed') {
+            return todos.filter(todo => todo.isComplete)
+        } else if (filter === 'running') {
+            return todos.filter(todo => !todo.isComplete)
+        } else {
+            return todos
+        }
+    }
     changeView = e => {
         this.setState({
             view: e.target.value
         })
     }
-    clearSelected = () => { }
-    clearCompleted = () => { }
-    reset = () => { }
+    clearSelected = () => {
+        const todos = this.state.todos.filter(todo => !todo.isSelect)
+        this.setState({ todos })
+    }
+    clearCompleted = () => {
+        const todos = this.state.todos.filter(todo => !todo.isComplete)
+        this.setState({ todos })
+    }
+    reset = () => {
+        this.setState({
+            isOpenToDoForm: false,
+            searchTerm: '',
+            view: 'list',
+            filter: 'all'
+        })
+    }
     getView = () => {
         let todos = this.performSearch()
+        todos = this.performFilter(todos)
         return this.state.view === 'list' ? (
             <ListView
                 todos={todos}
